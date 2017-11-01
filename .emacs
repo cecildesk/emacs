@@ -1,0 +1,105 @@
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Monaco" :foundry "outline" :slant normal :weight normal :height 90 :width normal)))))
+
+;;MELPA Package Install
+(require 'package) ;; You might already have this line
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/"))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize) ;; You might already have this line
+
+
+;; 한글폰트 관련 세팅
+(set-face-font 'default "Monaco-9")
+(set-fontset-font "fontset-default" '(#x1100 . #xffdc)
+                  '("맑은 고딕" . "iso10646-1"))
+;(set-fontset-font "fontset-default" '(#xe0bc . #xf66e)
+;                  '("맑은 고딕" . "iso10646-1"))
+
+
+(setq-default line-spacing 0)
+
+(setq face-font-rescale-alist
+      '((".*nanum.*" . 1.3)
+        (".*맑은.*" . 1.0)))
+
+
+
+;;rainbow-delimeter 
+(add-hook 'foo-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+;; show paren mode
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+;;
+(transient-mark-mode t)
+
+
+;;Web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+;;emmet mode hook 관련 세팅
+(require 'emmet-mode)
+(add-to-list 'load-path "~/Emacs/emmet/")
+;(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+;(add-hook 'html-mode-hook 'emmet-mode)
+;(add-hook 'css-mode-hook  'emmet-mode)
+
+
+;(setq emmet-preview-default t)
+(if (boundp 'web-mode-hook)
+    (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'html-mode-hook 'emmet-mode))
+(add-hook 'css-mode 'emmet-mode)
+
+
+;;
+(set-default 'truncate-lines t)  ;; Word-Wrap 없애기 코팅할때 편하게
+(global-linum-mode 1)   ;; 라인넘버 무조건 표시하기 (코팅용이라 우선 이렇게)
+
+;;The first customisations can be put in a hook like this
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+)
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+;Indentation
+;HTML element offset indentation
+(setq web-mode-markup-indent-offset 2)
+;CSS offset indentation
+(setq web-mode-css-indent-offset 2)
+;Script/code offset indentation (for JavaScript, Java, PHP, Ruby, VBScript, Python, etc.)
+(setq web-mode-code-indent-offset 2)
+
+;;Default Directory
+(global-set-key (kbd "C-x C-f")  (lambda () (interactive)
+                                     (cd "d:/project/")
+                                     (call-interactively 'find-file)))
